@@ -1,0 +1,81 @@
+Here's an example of a JavaScript file that contains data for jerseys:
+
+
+// jerseys.js
+
+const jerseys = [
+  {
+    id: 1,
+    title: "Manchester United Home Jersey",
+    club: "Manchester United",
+    category: "Men",
+    subcategory: "Long Sleeve",
+    price: 79.99,
+    image: "mu_home_ls.jpg"
+  },
+  {
+    id: 2,
+    title: "Barcelona Away Jersey",
+    club: "Barcelona",
+    category: "Men",
+    subcategory: "Short Sleeve",
+    price: 69.99,
+    image: "barca_away_ss.jpg"
+  },
+  {
+    id: 3,
+    title: "Chelsea Home Jersey",
+    club: "Chelsea",
+    category: "Women",
+    subcategory: "Long Sleeve",
+    price: 74.99,
+    image: "chelsea_home_ls.jpg"
+  },
+  {
+    id: 4,
+    title: "Liverpool Away Jersey",
+    club: "Liverpool",
+    category: "Children",
+    subcategory: "Short Sleeve",
+    price: 49.99,
+    image: "liverpool_away_ss.jpg"
+  },
+  {
+    id: 5,
+    title: "Real Madrid Home Jersey",
+    club: "Real Madrid",
+    category: "Men",
+    subcategory: "Long Sleeve",
+    price: 84.99,
+    image: "rm_home_ls.jpg"
+  },
+  // Add more jerseys here...
+];
+
+export default jerseys;
+
+
+This file exports an array of objects, where each object represents a jersey with properties like id, title, club, category, subcategory, price, and image. You can import and use this data in your e-commerce application.
+
+You can also generate more data using a loop if you have a lot of jerseys to add.
+
+If you want to use this data in a React application, you can import it like this:
+
+
+import jerseys from './jerseys.js';
+
+function App() {
+  return (
+    <div>
+      {jerseys.map((jersey) => (
+        <div key={jersey.id}>
+          <h2>{jersey.title}</h2>
+          <p>Club: {jersey.club}</p>
+          <p>Category: {jersey.category}</p>
+          <p>Subcategory: {jersey.subcategory}</p>
+          <p>Price: ${jersey.price}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
