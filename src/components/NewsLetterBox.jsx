@@ -11,8 +11,8 @@ const NewsLetterBox = () => {
         Subscribe now & get 20% off
       </p>
       <p className="text-gray-400 mt-3">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus,
-        maxime!
+        Sign up today & grab 20% off on stylish jersey wears. Don’t wait, look
+        fresh on and off the field!
       </p>
       <form
         onSubmit={onSubmitHandler}
