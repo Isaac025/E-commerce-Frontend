@@ -9,18 +9,19 @@ import Login from "./pages/Login";
 import Orders from "./pages/Orders";
 import PlaceOrder from "./pages/PlaceOrder";
 import Product from "./pages/Product";
-import Nav from "./components/Nav";
+import MainLayout from "./components/layouts/MainLayout";
 import Footer from "./components/Footer";
-import SearchBar from "./components/SearchBar";
+import AdminLayout from "./components/layouts/AdminLayout";
+import Add from "./pages/admin/Add";
+import List from "./pages/admin/List";
+import Orderss from "./pages/admin/Orderss";
 
 function App() {
   return (
     <>
-      <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
-        <Router>
-          <Nav />
-          <SearchBar />
-          <Routes>
+      <Router>
+        <Routes>
+          <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/collection" element={<Collection />} />
             <Route path="/about" element={<About />} />
@@ -30,10 +31,14 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/place-order" element={<PlaceOrder />} />
             <Route path="/orders" element={<Orders />} />
-          </Routes>
-          <Footer />
-        </Router>
-      </div>
+          </Route>
+          <Route element={<AdminLayout />}>
+            <Route path="/add" element={<Add />} />
+            <Route path="/admin/list" element={<List />} />
+            <Route path="/admin/orders" element={<Orderss />} />
+          </Route>
+        </Routes>
+      </Router>
     </>
   );
 }
