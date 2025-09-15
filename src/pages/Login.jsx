@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { ShopContext } from "../context/ShopContext";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance";
+import { toast } from "react-toastify";
 
 const Login = () => {
-  const [currentState, setCurrentState] = useState("Sign Up");
-
+  const [currentState, setCurrentState] = useState("Login");
+  const { token, setToken } = useContext(ShopContext);
+  const [submitting, setSubmitting] = useState(false);
+  const redirect = useNavigate();
   // Validation Schema (different for Login & Sign Up)
   const validationSchema = yup.object().shape({
     ...(currentState === "Sign Up" && {
@@ -21,7 +27,6 @@ const Login = () => {
       .required("Password is required"),
   });
 
-  
   const {
     register,
     handleSubmit,
@@ -32,14 +37,44 @@ const Login = () => {
   });
 
   // Form Submit Handler
-  const onSubmit = (data) => {
-    if (currentState === "Login") {
-      console.log("Login Data:", data);
-    } else {
-      console.log("Signup Data:", data);
+  const onSubmit = async (data) => {
+    setSubmitting(true);
+    try {
+      if (currentState === "Sign Up") {
+        const response = await axiosInstance.post("/user/register", data);
+        if (response.status === 201) {
+          toast.success("registration successfull!!!");
+          redirect("/");
+          // setToken(response.data.token);
+          // localStorage.setItem("token", response.data.token);
+        } else {
+          toast.error(response.data.message);
+        }
+      } else {
+        const response = await axiosInstance.post("/user/login", data);
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          setToken(response.data.token);
+          localStorage.setItem("token", response.data.token);
+        } else {
+          toast.error(response.data.message);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error?.response?.data?.message);
+    } finally {
+      reset();
+      setSubmitting(false);
     }
-    reset();
   };
+
+  useEffect(() => {
+    if (token) {
+      redirect("/");
+    } else {
+    }
+  }, [token]);
 
   return (
     <form
@@ -116,13 +151,18 @@ const Login = () => {
         )}
       </div>
 
-      {/* Submit Button */}
-      <button
-        type="submit"
-        className="cursor-pointer bg-black text-white font-light px-8 py-2 mt-4"
-      >
-        {currentState === "Login" ? "Sign In" : "Sign Up"}
-      </button>
+      {submitting ? (
+        <button className="cursor-not-allowed bg-gray-400 text-white font-light px-8 py-2 mt-4">
+          <span className="loading loading-spinner loading-sm"></span>
+        </button>
+      ) : (
+        <button
+          type="submit"
+          className="cursor-pointer bg-black text-white font-light px-8 py-2 mt-4"
+        >
+          {currentState === "Login" ? "Sign In" : "Sign Up"}
+        </button>
+      )}
     </form>
   );
 };
