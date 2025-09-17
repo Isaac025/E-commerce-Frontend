@@ -6,8 +6,10 @@ import { toast } from "react-toastify";
 const AdminLogin = ({ token, setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const onSubmitHandler = async (e) => {
+    setSubmitting(true);
     try {
       e.preventDefault();
       const response = await axiosInstance.post("/user/admin", {
@@ -24,6 +26,8 @@ const AdminLogin = ({ token, setToken }) => {
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -60,7 +64,11 @@ const AdminLogin = ({ token, setToken }) => {
             className="mt-2 w-full px-4 py-2 rounded-md text-white bg-black cursor-pointer"
             type="submit"
           >
-            Login
+            {submitting ? (
+              <span className="loading loading-spinner loading-sm"></span>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
       </div>
