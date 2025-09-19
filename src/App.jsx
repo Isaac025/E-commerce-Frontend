@@ -15,6 +15,7 @@ import AdminLayout from "./components/layouts/AdminLayout";
 import Add from "./pages/admin/Add";
 import List from "./pages/admin/List";
 import Orderss from "./pages/admin/Orderss";
+import Error404 from "./components/Error404";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/place-order" element={<PlaceOrder />} />
             <Route path="/orders" element={<Orders />} />
+            <Route path="*" element={<Error404 />} />
           </Route>
           <Route element={<AdminLayout />}>
             <Route path="/add" element={<Add />} />
