@@ -2,11 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
 import ProductItem from "./ProductItem";
+import { useNavigate } from "react-router-dom";
 
 const LatestCollection = () => {
   const { products } = useContext(ShopContext);
   const [latestProducts, setLatestProducts] = useState([]);
-  // console.log(products); // to check the products
+  const redirect = useNavigate();
 
   useEffect(() => {
     setLatestProducts(products.slice(0, 10));
@@ -17,8 +18,8 @@ const LatestCollection = () => {
       <div className="text-center py-8 text-3xl">
         <Title text1={"LATEST"} text2={"COLLECTIONS"} />
         <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi
-          magnam repellendus optio assumenda qui maxime.
+          Show your passion with the latest sport kit collection, crafted for
+          comfort, performance, and the pride of representing your team.
         </p>
       </div>
       {/* Rendering Products */}
@@ -35,6 +36,12 @@ const LatestCollection = () => {
           );
         })}
       </div>
+      <button
+        className="text-white bg-green-600 w-[200px] h-[50px] rounded-md cursor-pointer mx-auto block mt-20 hover:text-green-400 animate-bounce"
+        onClick={() => redirect("/collection")}
+      >
+        See More
+      </button>
     </div>
   );
 };
