@@ -30,3 +30,7 @@ a.active hr {
     color: white;
   }
 }
+
+.clip-trapezoid {
+  clip-path: polygon(1% 0, 100% 0, 92% 100%, 0% 100%);
+}
