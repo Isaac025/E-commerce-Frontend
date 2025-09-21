@@ -106,7 +106,12 @@ const Orderss = () => {
               <p className="text-xs sm:text-[15px]">
                 Items : {order.items.length}
               </p>
-              <p className="mt-3">Method : {order.paymentMethod}</p>
+              <p className="mt-3">
+                Method :{" "}
+                <span className="text-red-600 uppercase">
+                  {order.paymentMethod}
+                </span>
+              </p>
               <p>Payment : {order.payment ? "Done" : "Pending"}</p>
               <p>Date: {new Date(order.date).toLocaleDateString()}</p>
             </div>

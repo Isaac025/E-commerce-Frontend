@@ -10,9 +10,7 @@ const Orders = () => {
 
   const loadOrderData = async () => {
     try {
-      if (!token) {
-        return null;
-      }
+      if (!token) return null;
 
       const response = await axiosInstance.post(
         "/order/userorders",
@@ -38,6 +36,20 @@ const Orders = () => {
   useEffect(() => {
     loadOrderData();
   }, [token]);
+
+  // 🔹 Map backend keys to user-friendly names
+  const formatPaymentMethod = (method) => {
+    switch (method) {
+      case "cod":
+        return "Cash on Delivery";
+      case "whatsapp":
+        return "WhatsApp";
+      case "paytobank":
+        return "Bank Transfer";
+      default:
+        return method;
+    }
+  };
 
   return (
     <div className="border-t pt-16">
@@ -70,7 +82,9 @@ const Orders = () => {
                 </p>
                 <p className="mt-1">
                   Payment Method:{" "}
-                  <span className="text-gray-400">{item.paymentMethod}</span>
+                  <span className="text-gray-400">
+                    {formatPaymentMethod(item.paymentMethod)}
+                  </span>
                 </p>
               </div>
             </div>
