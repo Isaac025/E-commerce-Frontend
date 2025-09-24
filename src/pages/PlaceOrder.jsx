@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Title from "../components/Title";
 import CartTotal from "../components/CartTotal";
 import { assets } from "../assets/frontend_assets/assets";
@@ -10,7 +10,9 @@ import { FaWhatsapp } from "react-icons/fa";
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState("cod");
-  const [showBankModal, setShowBankModal] = useState(false); // 🔴 bank modal state
+  const [showBankModal, setShowBankModal] = useState(false);
+  const [showCryptoModal, setShowCryptoModal] = useState(false);
+  const [rates, setRates] = useState({ bitcoin: { usd: 0 } });
 
   const {
     token,
@@ -22,6 +24,21 @@ const PlaceOrder = () => {
   } = useContext(ShopContext);
 
   const redirect = useNavigate();
+
+  useEffect(() => {
+    const fetchRates = async () => {
+      try {
+        const res = await fetch(
+          "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+        );
+        const data = await res.json();
+        setRates(data);
+      } catch (error) {
+        console.error("Error fetching BTC rates:", error);
+      }
+    };
+    fetchRates();
+  }, []);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -69,16 +86,8 @@ const PlaceOrder = () => {
       };
 
       switch (method) {
-        case "cod": {
-          const response = await axiosInstance.post("/order/place", orderData, {
-            headers: { token },
-          });
-          if (response.status === 200) {
-            setCartItems({});
-            redirect("/orders");
-          } else {
-            toast.error(response.data.message);
-          }
+        case "crypto": {
+          setShowCryptoModal(true);
           break;
         }
 
@@ -170,6 +179,10 @@ ${orderItems
       toast.error("Bank order failed.");
     }
   };
+
+  const totalUSD = getCartAmount() + delivery_fee;
+  const btcRate = rates.bitcoin?.usd || 1;
+  const totalBTC = totalUSD / btcRate;
 
   return (
     <>
@@ -278,7 +291,6 @@ ${orderItems
           <div className="mt-12">
             <Title text1={"PAYMENT"} text2={"METHOD"} />
             <div className="flex gap-3 flex-col lg:flex-row">
-              {/* 🔴 Pay to Bank Option */}
               <div
                 onClick={() => setMethod("paytobank")}
                 className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
@@ -294,8 +306,22 @@ ${orderItems
               </div>
 
               <div
+                onClick={() => setMethod("crypto")}
+                className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
+              >
+                <p
+                  className={`min-w-3.5 h-3.5 border rounded-full ${
+                    method === "crypto" ? "bg-green-400" : ""
+                  }`}
+                ></p>
+                <p className="text-gray-500 text-sm font-medium mx-4">
+                  PAY WITH CRYPTO
+                </p>
+              </div>
+
+              <div
                 onClick={() => setMethod("whatsapp")}
-                className="flex items-center  border p-2 px-3 cursor-pointer"
+                className="flex items-center border p-2 px-3 cursor-pointer"
               >
                 <p
                   className={`min-w-3.5 h-3.5 border rounded-full ${
@@ -304,20 +330,6 @@ ${orderItems
                 ></p>
                 <FaWhatsapp className="text-green-500 text-2xl mx-4" />
                 <p className="text-gray-500 text-sm font-medium">WhatsApp</p>
-              </div>
-
-              <div
-                onClick={() => setMethod("cod")}
-                className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
-              >
-                <p
-                  className={`min-w-3.5 h-3.5 border rounded-full ${
-                    method === "cod" ? "bg-green-400" : ""
-                  }`}
-                ></p>
-                <p className="text-gray-500 text-sm font-medium mx-4">
-                  CASH ON DELIVERY
-                </p>
               </div>
             </div>
             <div className="w-full text-end mt-8">
@@ -361,6 +373,93 @@ ${orderItems
               </button>
               <button
                 onClick={handleBankConfirm}
+                className="px-4 py-2 bg-green-600 text-white rounded"
+              >
+                I Have Paid
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 🔹 Crypto Modal */}
+      {/* 🔹 Crypto Modal */}
+      {showCryptoModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg w-96 shadow-lg text-center">
+            <h2 className="text-lg font-semibold mb-4">Pay with Bitcoin</h2>
+
+            {/* ✅ QR Code with BTC + Amount */}
+            <img
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=bitcoin:bc1qc4kjtfsmmt6j8kk85sq0fflz0u5mggjrq3gq8f?amount=${totalBTC.toFixed(
+                6
+              )}`}
+              alt="Crypto QR"
+              className="mx-auto mb-4"
+            />
+
+            <p className="text-sm break-all">
+              <strong>BTC Address:</strong>{" "}
+              bc1qc4kjtfsmmt6j8kk85sq0fflz0u5mggjrq3gq8f
+            </p>
+            <p className="text-sm">
+              <strong>Amount (USD):</strong> ${totalUSD.toFixed(2)}
+            </p>
+            <p className="text-sm">
+              <strong>Amount (BTC):</strong> {totalBTC.toFixed(6)} BTC
+            </p>
+
+            <p className="text-xs text-gray-500 mt-2">
+              Send the exact BTC amount to the wallet. After payment, click "I
+              Have Paid".
+            </p>
+
+            <div className="flex justify-end gap-3 mt-4">
+              <button
+                onClick={() => setShowCryptoModal(false)}
+                className="px-4 py-2 border rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  try {
+                    let orderItems = [];
+                    for (const items in cartItems) {
+                      for (const item in cartItems[items]) {
+                        if (cartItems[items][item] > 0) {
+                          const itemInfo = structuredClone(
+                            products.find((p) => p._id === items)
+                          );
+                          if (itemInfo) {
+                            itemInfo.size = item;
+                            itemInfo.quantity = cartItems[items][item];
+                            orderItems.push(itemInfo);
+                          }
+                        }
+                      }
+                    }
+
+                    const response = await axiosInstance.post(
+                      "/order/place",
+                      {
+                        address: formData,
+                        items: orderItems,
+                        amount: totalUSD,
+                        paymentMethod: "crypto",
+                      },
+                      { headers: { token } }
+                    );
+
+                    if (response.status === 200) {
+                      setCartItems({});
+                      setShowCryptoModal(false);
+                      redirect("/orders");
+                    }
+                  } catch (error) {
+                    toast.error("Crypto order failed.");
+                  }
+                }}
                 className="px-4 py-2 bg-green-600 text-white rounded"
               >
                 I Have Paid

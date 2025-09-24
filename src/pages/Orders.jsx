@@ -37,11 +37,10 @@ const Orders = () => {
     loadOrderData();
   }, [token]);
 
-  // 🔹 Map backend keys to user-friendly names
   const formatPaymentMethod = (method) => {
     switch (method) {
-      case "cod":
-        return "Cash on Delivery";
+      case "crypto":
+        return "Crypto Payment";
       case "whatsapp":
         return "WhatsApp";
       case "paytobank":

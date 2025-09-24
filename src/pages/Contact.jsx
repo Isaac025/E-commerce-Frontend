@@ -22,7 +22,7 @@ const Contact = () => {
             54709 Willms Station <br /> Suite 350, Washington, USA
           </p>
           <p className="text-gray-500">
-            Tel: (415) 555-0132 <br /> Email: admin@forever.com
+            Tel: +234-905-744-9212 <br /> Email: gspremierglobal@gmail.com
           </p>
         </div>
       </div>

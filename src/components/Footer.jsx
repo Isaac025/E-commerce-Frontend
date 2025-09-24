@@ -25,7 +25,11 @@ const Footer = () => {
               </Link>
             </li>
             <li>Delivery</li>
-            <li>Privacy policy</li>
+            <li>
+              <Link to="/privacy-policy" onClick={() => window.scrollTo(0, 0)}>
+                Privacy policy
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -33,7 +37,7 @@ const Footer = () => {
           <p className="text-xl font-medium mb-5">GET IN TOUCH</p>
           <ul className="flex flex-col gap-1 text-gray-600">
             <li>+234-905-744-9212</li>
-            <li>shawbry5150@gmail.com</li>
+            <li>gspremierglobal@gmail.com</li>
           </ul>
         </div>
       </div>

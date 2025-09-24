@@ -16,6 +16,7 @@ import Add from "./pages/admin/Add";
 import List from "./pages/admin/List";
 import Orderss from "./pages/admin/Orderss";
 import Error404 from "./components/Error404";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/place-order" element={<PlaceOrder />} />
             <Route path="/orders" element={<Orders />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+
             <Route path="*" element={<Error404 />} />
           </Route>
           <Route element={<AdminLayout />}>
