@@ -3,6 +3,8 @@ import Nav from "../Nav";
 import Footer from "../Footer";
 import SearchBar from "../SearchBar";
 import { Outlet } from "react-router-dom";
+import BackToTop from "../BackToTop";
+import WhatsappButton from "../WhatsappButton";
 
 const MainLayout = () => {
   return (
@@ -10,6 +12,8 @@ const MainLayout = () => {
       <Nav />
       <SearchBar />
       <Outlet />
+      <BackToTop />
+      <WhatsappButton />
       <Footer />
     </div>
   );
