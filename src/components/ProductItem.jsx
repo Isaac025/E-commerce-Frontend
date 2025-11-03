@@ -15,10 +15,12 @@ const ProductItem = ({ id, image, name, price }) => {
         <img
           src={image[0]}
           alt=""
-          className="hover:scale-110 transition ease-in-out h-[250px]"
+          className="hover:scale-110 transition ease-in-out h-[250px] w-full object-cover"
         />
-        <p className="pt-3 pb-1 text-sm">{name}</p>
-        <p className="text-sm font-medium">
+        <p className="pt-3 pb-1 md:text-sm text-[20px] max-sm:font-[600]">
+          {name}
+        </p>
+        <p className="text-sm font-medium md:text-sm text-[20px] max-sm:font-[600]">
           {currency}
           {price}
         </p>
