@@ -40,7 +40,7 @@ const ShopContextProvider = ({ children }) => {
         await axiosInstance.post(
           "/cart/add",
           { itemId, size },
-          { headers: { token } }
+          { headers: { token } },
         );
       } catch (error) {
         console.error(error);
@@ -77,7 +77,7 @@ const ShopContextProvider = ({ children }) => {
         await axiosInstance.post(
           "/cart/update",
           { itemId, size, quantity },
-          { headers: { token } }
+          { headers: { token } },
         );
       } catch (error) {
         console.error(error);
@@ -121,7 +121,7 @@ const ShopContextProvider = ({ children }) => {
       const response = await axiosInstance.post(
         "/cart/get",
         {},
-        { headers: { token } }
+        { headers: { token } },
       );
 
       if (response.status === 200) {
@@ -158,7 +158,6 @@ const ShopContextProvider = ({ children }) => {
     getCartCount,
     updateQuantity,
     getCartAmount,
-    products,
     setProducts,
     getProductsData,
     setToken,
